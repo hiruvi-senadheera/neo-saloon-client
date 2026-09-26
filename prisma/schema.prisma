@@ -12,14 +12,23 @@ datasource db {
   provider = "postgresql"
 }
 
-//create a table Student
-model Student{
-  email String @id
-  name String
-  city String
-}
 
-model Course{
-  id String @id
-  name String
-}
+
+//create a table user
+
+model User{
+  userId String @id @default(uuid())
+  email String @unique
+  phone String? @unique
+  fName String
+  lName String
+  password String
+  role String @default("CUSTOMER")
+  status String @default("ACTIVE")  // ACTIVE, BANNED, SUSPENDED
+  createdAt DateTime @default(now())
+  lastLogin DateTime?
+  privileges String[] @default([])  // ["CREATE_PRODUCT", "UPDATE_PRODUCT", "DELETE_PRODUCT", "VIEW_PRODUCT"]
+  //gender
+  //emailVerified
+  //phoneVerified
+  }

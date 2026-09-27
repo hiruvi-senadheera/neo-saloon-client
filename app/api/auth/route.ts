@@ -35,11 +35,23 @@ export async function POST(request : NextRequest) {
 
     const isPasswordValid = await compare(body.password, user.password);
     if(isPasswordValid){
-        return NextResponse.json(
+
+        const secretText = "TemporySecret8929%"
+
+        const secret = new TextEncoder().encode(secretText)
+
+        const token = await new jose.SignJWT(
             {
-                message : "Login successful",
+                email : user.email,
+                fName : user.fName,
+                lName : user.lName,
+                role : user.role,
+                privileges : user.privileges
             }
-        )
+        ).setProtectedHeader({alg : "HS256"}).sign(secret)
+
+        console.log(token)
+
     }else{
         return NextResponse.json(
             {

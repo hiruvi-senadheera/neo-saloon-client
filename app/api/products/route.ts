@@ -1,9 +1,7 @@
+import { getUser } from "@/utils/authentication";
 import { NextRequest } from "next/server";
 
-export function GET(request : NextRequest){
-    const cookies = request.cookies.get("login-token")?.value
-
-    console.log("Cookies : ", cookies)
-
-    console.log("GET request received at /api/products")
+export function POST(request : NextRequest){
+    const user = getUser(request)
+    console.log("User: ", user)
 }

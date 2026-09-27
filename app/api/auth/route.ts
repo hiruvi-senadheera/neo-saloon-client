@@ -36,7 +36,7 @@ export async function POST(request : NextRequest) {
     const isPasswordValid = await compare(body.password, user.password);
     if(isPasswordValid){
 
-        const secretText = "TemporySecret8929%"
+        const secretText = process.env.JOSE_SECRET
 
         const secret = new TextEncoder().encode(secretText)
 

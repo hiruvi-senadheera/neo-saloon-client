@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { compare } from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
+import * as jose from "jose";
 
 export async function POST(request : NextRequest) {
 

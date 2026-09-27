@@ -16,6 +16,14 @@ export async function POST(request : NextRequest) {
         )
     }
 
+    if(body.password == null){
+        return NextResponse.json(
+            {
+                message : "Password is required"
+            }
+        )
+    }
+
     const user = await prisma.user.findFirst(
         {
             where : {
@@ -29,6 +37,14 @@ export async function POST(request : NextRequest) {
         return NextResponse.json(
             {
                 message : "User not found"
+            }
+        )
+    }
+
+    if(user.status != "ACTIVE"){
+        return NextResponse.json(
+            {
+                message : "Your account is disabled. Please contact the administrator."
             }
         )
     }

@@ -50,7 +50,25 @@ export async function POST(request : NextRequest) {
             }
         ).setProtectedHeader({alg : "HS256"}).sign(secret)
 
-        console.log(token)
+        const response = NextResponse.json(
+            {
+                message : "Login successful",
+                role : user.role,
+            }
+        )
+
+        response.cookies.set(
+            {
+                name : "login-token",
+                value : token,
+                httpOnly : true,
+                secure : false,
+                sameSite : "lax",  //strict
+                maxAge : 60 * 60 * 24 * 7, //7 days
+            }
+        )
+
+        return response
 
     }else{
         return NextResponse.json(

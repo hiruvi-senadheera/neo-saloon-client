@@ -50,7 +50,19 @@ export async function POST(request : NextRequest) {
     }
 
     const isPasswordValid = await compare(body.password, user.password);
+    
     if(isPasswordValid){
+
+        await prisma.user.update(
+            {
+                where : {
+                    userId : user.userId
+                },
+                data : {
+                    lastLogin : new Date()
+                }
+            }
+        )
 
         const secretText = process.env.JOSE_SECRET
 

@@ -82,6 +82,7 @@ export async function POST(request : NextRequest) {
 
         const token = await new jose.SignJWT(
             {
+                userId : user.userId,
                 email : user.email,
                 fName : user.fName,
                 lName : user.lName,

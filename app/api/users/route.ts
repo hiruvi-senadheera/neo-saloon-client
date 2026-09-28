@@ -47,6 +47,7 @@ export async function GET(request : NextRequest){
        )
 }
 
+//-------------------------------------------------------------------------------------------------------
 
 
 // user registration
@@ -144,4 +145,38 @@ export async function POST(request : NextRequest){
     )
 
     
+}
+
+
+//-------------------------------------------------------------------------------------------------------
+
+// user update
+
+export async function PUT(request : NextRequest){
+
+    const userId = request.nextUrl.searchParams.get("userId")
+
+    const requestedUser = await getUser(request)
+
+    if(requestedUser == null){
+        return NextResponse.json(
+            {
+                message : "You are not logged in."
+            },
+            {
+                status : 401
+            }
+        )
+    }
+
+    if(requestedUser.userId == userId){ 
+
+        //trying to update own account. allow it.
+        
+
+    }else{
+
+        // trying to update other user's account. check if the user has the privilege to update other users.
+    }
+
 }

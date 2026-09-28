@@ -12,6 +12,9 @@ export async function POST(request : NextRequest) {
         return NextResponse.json(
             {
                 message : "Email is required"
+            },
+            {
+                status : 400
             }
         )
     }
@@ -20,6 +23,9 @@ export async function POST(request : NextRequest) {
         return NextResponse.json(
             {
                 message : "Password is required"
+            },
+            {
+                status : 400
             }
         )
     }
@@ -37,6 +43,9 @@ export async function POST(request : NextRequest) {
         return NextResponse.json(
             {
                 message : "User not found"
+            },
+            {
+                status : 404
             }
         )
     }
@@ -45,6 +54,9 @@ export async function POST(request : NextRequest) {
         return NextResponse.json(
             {
                 message : "Your account is disabled. Please contact the administrator."
+            },
+            {
+                status : 403
             }
         )
     }
@@ -102,6 +114,9 @@ export async function POST(request : NextRequest) {
         return NextResponse.json(
             {
                 message : "Invalid password"
+            },
+            {
+                status : 401
             }
         )
     }

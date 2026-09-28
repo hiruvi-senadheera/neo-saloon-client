@@ -1,23 +1,22 @@
 import prisma from "@/lib/prisma";
-import { getUser } from "@/utils/authentication";
+import { getUser, isPrivileged } from "@/utils/authentication";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request : NextRequest){
 
-    const requestedUser = await getUser(request)
+    const havePrivilege = await isPrivileged(request, "users:read")
 
-    if(requestedUser == null){
+    if(!havePrivilege){
         return NextResponse.json(
             {
-                message : "You need to be logged in to access this resource"
+                message : "You do not have the privilege to view users."
             },
             {
-                status : 401
+                status : 403
             }
         )
     }
 
-    if(requestedUser.privileges.includes("users:read")){
 
         const users = await prisma.user.findMany({
             select : {
@@ -31,9 +30,9 @@ export async function GET(request : NextRequest){
                 status : true,
                 createdAt : true,
                 lastLogin : true,
-                privileges : true
+                
             }
-        })
+        }) 
 
         return NextResponse.json(
             {
@@ -41,15 +40,5 @@ export async function GET(request : NextRequest){
                 users : users
             },
        )
-    }else{
-        return NextResponse.json(
-            {
-                message : "You do not have the required privileges to access this resource"
-            },
-            {
-                status : 403
-            }
-        )
-    }
-    
 }
+    

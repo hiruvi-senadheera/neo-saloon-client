@@ -11,6 +11,20 @@ export async function POST(request : NextRequest){
         return NextResponse.json(
             {
                 message : "Email is required"
+            },
+            {
+                status : 400
+            }
+        )
+    }
+
+    if(body.password == null){
+        return NextResponse.json(
+            {
+                message : "Password is required"
+            },
+            {
+                status : 400
             }
         )
     }
@@ -27,6 +41,20 @@ export async function POST(request : NextRequest){
         return NextResponse.json(
             {
                 message : "User not found"
+            },
+            {
+                status : 401
+            }
+        )
+    }
+
+    if(user.status != "ACTIVE"){
+        return NextResponse.json(
+            {
+                message : "Your account is disabled. Please contact the administrator."
+            },
+            {
+                status : 403
             }
         )
     }
@@ -35,6 +63,16 @@ export async function POST(request : NextRequest){
     const isPasswordValid = await compare(body.password, user.password)
 
     if(isPasswordValid){
+
+            //last login time update
+            await prisma.user.update({
+                where : {
+                    id : user.id
+                },
+                data : {
+                    lastLogin : new Date()
+                }
+            })
         
             const secretText = process.env.JOSE_SECRET
             const secret = new TextEncoder().encode(secretText)
@@ -50,6 +88,9 @@ export async function POST(request : NextRequest){
             {
                 message : "Login successful",
                 role : user.role
+            },
+            {
+                status : 200
             }
         )
 
@@ -68,6 +109,9 @@ export async function POST(request : NextRequest){
         return NextResponse.json(
             {
                 message : "Invalid password"
+            },
+            {
+                status : 401
             }
         )
     }
